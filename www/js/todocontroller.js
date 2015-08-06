@@ -2,23 +2,33 @@ angular.module('todo')
 
 .controller('TodoCtrl', function($scope, $timeout, $ionicModal, Projects, $ionicSideMenuDelegate) {
 
-  // A utility function for creating a new project
-  // with the given projectTitle
+  /**
+   *  An utility function for creating a new project with the given projectTitle
+   * @param  projectTitle
+   * @return void
+   */
   var createProject = function(projectTitle) {
     var newProject = Projects.newProject(projectTitle);
     $scope.projects.push(newProject);
     Projects.save($scope.projects);
-    $scope.selectProject(newProject, $scope.projects.length-1);
+    $scope.selectProject(newProject, $scope.projects.length - 1);
   }
 
-  // Load or initialize projects
+  /*
+   * Load or Initialize projects
+   */
   $scope.projects = Projects.all();
 
-  // Grab the last active, or the first project
+  /*
+   * Grab the last active, or the first project
+   */
   $scope.activeProject = $scope.projects[Projects.getLastActiveIndex()];
   console.log( $scope.activeProject.tasks);
 
-  // Called to create a new project
+  /**
+   * Called to create a new project
+   * @return void
+   */
   $scope.newProject = function() {
     var projectTitle = prompt('Project name');
     if(projectTitle) {
@@ -26,25 +36,37 @@ angular.module('todo')
     }
   };
 
-  // Called to select the given project
+  /**
+   * Called to select the given project
+   * @param  project
+   * @param  index
+   * @return void
+   */
   $scope.selectProject = function(project, index) {
     $scope.activeProject = project;
     Projects.setLastActiveIndex(index);
     $ionicSideMenuDelegate.toggleLeft(false);
   };
 
-  // No need for testing data anymore
   $scope.tasks = [];
+
+  // Error message if there are no tasks present
   $scope.message = 'No tasks Listed yet';
 
-  // Create and load the Modal
+  /*
+   * Create and load the Modal
+   */
   $ionicModal.fromTemplateUrl('new-task.html', function(modal) {
     $scope.taskModal = modal;
   }, {
     scope: $scope
   });
 
-  // Called when the form is submitted
+  /**
+   * Called when the form is submitted
+   * @param  task
+   * @return void
+   */
   $scope.createTask = function(task) {
     if(!$scope.activeProject || !task) {
       return;
@@ -60,23 +82,34 @@ angular.module('todo')
     task.title = "";
   };
 
-  // Open our new task modal
+  /**
+   * Open our new task modal
+   * @return void
+   */
   $scope.newTask = function() {
     $scope.taskModal.show();
   };
 
-  // Close the new task modal
+  /**
+   * Close the new task modal
+   * @return void
+   */
   $scope.closeNewTask = function() {
     $scope.taskModal.hide();
   };
 
+  /**
+   *  Toggle Projects sidebar
+   * @return void
+   */
   $scope.toggleProjects = function() {
     $ionicSideMenuDelegate.toggleLeft();
   };
 
-  // Try to create the first project, make sure to defer
-  // this by using $timeout so everything is initialized
-  // properly
+  /**
+   * Try to create the first project, make sure to defer this by
+   * using $timeout so everything is initialized properly
+   */
   $timeout(function() {
     if($scope.projects.length == 0) {
       while(true) {
@@ -88,5 +121,4 @@ angular.module('todo')
       }
     }
   });
-
-})
+});
