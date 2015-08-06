@@ -5,6 +5,10 @@
  */
 app.factory('Projects', function() {
   return {
+    /**
+     * [all description]
+     * @return {[type]} [description]
+     */
     all: function() {
       var projectString = window.localStorage['projects'];
       if(projectString) {
@@ -12,19 +16,36 @@ app.factory('Projects', function() {
       }
       return [];
     },
+    /**
+     * [save description]
+     * @param  {[type]} projects [description]
+     * @return {[type]}          [description]
+     */
     save: function(projects) {
       window.localStorage['projects'] = angular.toJson(projects);
     },
+    /**
+     * Add a new project
+     * @param  {[type]} projectTitle [description]
+     * @return {[type]}              [description]
+     */
     newProject: function(projectTitle) {
-      // Add a new project
       return {
         title: projectTitle,
         tasks: []
       };
     },
+    /**
+     * [getLastActiveIndex description]
+     * @return {[type]} [description]
+     */
     getLastActiveIndex: function() {
       return parseInt(window.localStorage['lastActiveProject']) || 0;
     },
+    /**
+     * [setLastActiveIndex description]
+     * @param {[type]} index [description]
+     */
     setLastActiveIndex: function(index) {
       window.localStorage['lastActiveProject'] = index;
     }
